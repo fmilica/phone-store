@@ -11,7 +11,6 @@ import (
 type RatingController interface {
 	GetAll(response http.ResponseWriter, request *http.Request)
 	Save(response http.ResponseWriter, request *http.Request)
-	// DeleteAll(response http.ResponseWriter, request *http.Request)
 }
 
 type ratingController struct{}

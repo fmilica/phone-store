@@ -12,7 +12,6 @@ type DisplayController interface {
 	Search(response http.ResponseWriter, request *http.Request)
 	GetAll(response http.ResponseWriter, request *http.Request)
 	Save(response http.ResponseWriter, request *http.Request)
-	// DeleteAll(response http.ResponseWriter, request *http.Request)
 }
 
 type displayController struct{}
@@ -92,10 +91,6 @@ func (*displayController) Search(response http.ResponseWriter, request *http.Req
 	json.NewEncoder(response).Encode(displays)
 }
 
-// /*
-// 	Ova metoda je samo dok se razvija klijent.
-// 	Samo dobavljamo sve oglase.
-// */
 func (*displayController) GetAll(response http.ResponseWriter, request *http.Request) {
 
 	fmt.Println("*** Call GetAll Method ***")

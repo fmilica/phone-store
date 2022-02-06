@@ -306,39 +306,3 @@ func querySortAverageRate(sort string) string {
 	}
 	return ``
 }
-
-/*
-	Remove offers whose publish date
-	is not in dateFrom-dateTo range.
-*/
-// func filterByDate(offers []model.Display, dateFrom time.Time, dateTo time.Time) []model.Display {
-
-// 	for idx, offer := range offers {
-// 		if !(offer.Vehicle.Date.After(dateFrom) && offer.Vehicle.Date.Before(dateTo)) {
-// 			return append(offers[0:idx], offers[idx+1:]...)
-// 		}
-// 	}
-
-// 	return offers
-// }
-
-/*
-	Sort list by publish date.
-	If asc is true sort offer by newest,
-	otherwise by oldest.
-*/
-// func sortByDate(offers []model.Offer, sortStr string) []model.Offer {
-
-// 	if sortStr == "newest" { // sort asc
-// 		sort.Slice(offers, func(i, j int) bool {
-// 			return offers[i].Date.After(offers[j].Date)
-// 		})
-// 	} else if sortStr == "oldest" { //sort desc
-// 		sort.Slice(offers, func(i, j int) bool {
-// 			return offers[i].Date.Before(offers[j].Date)
-// 		})
-// 	}
-
-// 	return offers
-
-// }

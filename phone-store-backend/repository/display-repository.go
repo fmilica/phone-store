@@ -195,8 +195,5 @@ func (*displayRepo) Search(search *model.DisplaySearchDTO) ([]model.Display, err
 			Phone: phone, Ratings: ratings, Comments: comments})
 	}
 
-	// offers = filterByDate(offers, search.DateFrom, search.DateTo)
-	// offers = sortByDate(offers, search.Sort)
-
 	return displays, nil
 }
