@@ -295,3 +295,26 @@ func dropConstraint() {
 
 	fmt.Println("Constraints removed")
 }
+
+func addColumn() {
+	// connection string
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	// close database when return
+	defer db.Close()
+
+	// insert to db
+	insertStmt := `
+		ALTER TABLE "Display"
+		ADD COLUMN averageRate INTEGER;
+	`
+	_, e := db.Exec(insertStmt)
+	CheckError(e)
+
+	fmt.Println("column added")
+}

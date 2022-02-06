@@ -6,5 +6,6 @@ func main() {
 	// deleteAll()
 	// createAllInit()
 	// dropConstraint()
+	// addColumn()
 	runServer()
 }

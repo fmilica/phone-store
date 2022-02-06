@@ -228,7 +228,7 @@ func searchPreprocess(search *model.DisplaySearchDTO) {
 func getQuery(search *model.DisplaySearchDTO) string {
 
 	query := `
-	SELECT "D"."id", "D"."price", "D"."date", "P"."id",
+	SELECT "D"."id", "D"."price", "D"."date", "D"."averagerate", "P"."id",
 	"P"."brand", "P"."model", "P"."date", "P"."processor", "P"."battery", "P"."ram"
 	FROM "Display" "D", "Phone" "P"
 	WHERE "D"."phoneId" = "P"."id"
@@ -236,7 +236,7 @@ func getQuery(search *model.DisplaySearchDTO) string {
 	AND "P"."date" BETWEEN $3 AND $4
 	` + queryFilterBrand(search.Brand) + queryFilterProcessor(search.Processor) +
 		queryFilterBattery(search.Battery) + queryFilterRAM(search.RAM) +
-		querySortPrice(search.Sort) + querySortDate(search.Sort)
+		querySortPrice(search.Sort) + querySortDate(search.Sort) + querySortAverageRate(search.Sort)
 
 	return query
 }
@@ -296,6 +296,14 @@ func querySortDate(sort string) string {
 		return `ORDER BY "P"."date" DESC`
 	}
 
+	return ``
+}
+
+func querySortAverageRate(sort string) string {
+
+	if sort == "average rate" {
+		return `ORDER BY "D"."averagerate" DESC`
+	}
 	return ``
 }
 

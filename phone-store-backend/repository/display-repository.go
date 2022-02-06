@@ -71,7 +71,7 @@ func (*displayRepo) FindAll() ([]model.Display, error) {
 	defer db.Close()
 
 	query := `
-		SELECT "D"."id", "D"."price", "D"."date", "P"."id",
+		SELECT "D"."id", "D"."price", "D"."date", "D"."averagerate", "P"."id",
 		"P"."brand", "P"."model", "P"."date", "P"."processor", "P"."battery", "P"."ram"
 		FROM "Display" "D", "Phone" "P"
 		WHERE "D"."phoneId" = "P"."id"`
@@ -90,6 +90,7 @@ func (*displayRepo) FindAll() ([]model.Display, error) {
 		var id string
 		var price int
 		var date string
+		var averageRate int
 		var phoneId string
 		var brand string
 		var phoneModel string
@@ -98,7 +99,7 @@ func (*displayRepo) FindAll() ([]model.Display, error) {
 		var battery string
 		var ram int
 
-		err = rows.Scan(&id, &price, &date,
+		err = rows.Scan(&id, &price, &date, &averageRate,
 			&phoneId, &brand, &phoneModel, &phoneDate, &processor, &battery, &ram)
 		CheckErrorDisplay(err)
 
@@ -120,7 +121,7 @@ func (*displayRepo) FindAll() ([]model.Display, error) {
 		comments := getCommentsByDisplay(id)
 
 		d2, _ := time.Parse(layout, date[0:10])
-		displays = append(displays, model.Display{Id: id, Price: price, Date: d2,
+		displays = append(displays, model.Display{Id: id, Price: price, Date: d2, AverageRating: averageRate,
 			Phone: phone, Ratings: ratings, Comments: comments})
 	}
 
@@ -160,6 +161,7 @@ func (*displayRepo) Search(search *model.DisplaySearchDTO) ([]model.Display, err
 		var id string
 		var price int
 		var date string
+		var averageRate int
 		var phoneId string
 		var brand string
 		var phoneModel string
@@ -168,7 +170,7 @@ func (*displayRepo) Search(search *model.DisplaySearchDTO) ([]model.Display, err
 		var battery string
 		var ram int
 
-		err = rows.Scan(&id, &price, &date,
+		err = rows.Scan(&id, &price, &date, &averageRate,
 			&phoneId, &brand, &phoneModel, &phoneDate, &processor, &battery, &ram)
 		CheckErrorDisplay(err)
 
@@ -189,7 +191,7 @@ func (*displayRepo) Search(search *model.DisplaySearchDTO) ([]model.Display, err
 		comments := getCommentsByDisplay(id)
 
 		d2, _ := time.Parse(layout, date[0:10])
-		displays = append(displays, model.Display{Id: id, Price: price, Date: d2,
+		displays = append(displays, model.Display{Id: id, Price: price, Date: d2, AverageRating: averageRate,
 			Phone: phone, Ratings: ratings, Comments: comments})
 	}
 
