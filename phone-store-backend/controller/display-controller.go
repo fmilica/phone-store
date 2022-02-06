@@ -9,8 +9,8 @@ import (
 )
 
 type DisplayController interface {
-	// GetAll(response http.ResponseWriter, request *http.Request)
-	GetAll2(response http.ResponseWriter, request *http.Request)
+	Search(response http.ResponseWriter, request *http.Request)
+	GetAll(response http.ResponseWriter, request *http.Request)
 	Save(response http.ResponseWriter, request *http.Request)
 	// DeleteAll(response http.ResponseWriter, request *http.Request)
 }
@@ -64,46 +64,45 @@ func (*displayController) Save(response http.ResponseWriter, request *http.Reque
 	json.NewEncoder(response).Encode(result)
 }
 
-// func (*displayController) GetAll(response http.ResponseWriter, request *http.Request) {
+func (*displayController) Search(response http.ResponseWriter, request *http.Request) {
 
-// 	fmt.Println("*** Call GetAll Search Method ***")
+	fmt.Println("*** Call GetAll Search Method ***")
 
-// 	response.Header().Set("Content-Type", "application/json")
+	response.Header().Set("Content-Type", "application/json")
 
-// 	var search model.Search
-// 	fmt.Println(request.Body)
+	var search model.DisplaySearchDTO
 
-// 	err := json.NewDecoder(request.Body).Decode(&search)
+	err := json.NewDecoder(request.Body).Decode(&search)
 
-// 	if err != nil {
-// 		response.WriteHeader(http.StatusInternalServerError)
-// 		json.NewEncoder(response).Encode(model.ErrorMessage{Message: "Error unmarshaling data"})
-// 		fmt.Println("Greska1 phone display cont")
-// 		return
-// 	}
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(response).Encode(model.ErrorMessage{Message: "Error unmarshaling data"})
+		fmt.Println("Greska1 phone display cont")
+		return
+	}
 
-// 	displays, err := displayService.FindAll(&search)
+	displays, err := displayService.Search(&search)
 
-// 	if err != nil {
-// 		response.WriteHeader(http.StatusInternalServerError)
-// 		json.NewEncoder(response).Encode(model.ErrorMessage{Message: "Error getting the phone displays."})
-// 	}
+	if err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(response).Encode(model.ErrorMessage{Message: "Error getting the phone displays."})
+	}
 
-// 	response.WriteHeader(http.StatusOK)
-// 	json.NewEncoder(response).Encode(displays)
-// }
+	response.WriteHeader(http.StatusOK)
+	json.NewEncoder(response).Encode(displays)
+}
 
 // /*
 // 	Ova metoda je samo dok se razvija klijent.
 // 	Samo dobavljamo sve oglase.
 // */
-func (*displayController) GetAll2(response http.ResponseWriter, request *http.Request) {
+func (*displayController) GetAll(response http.ResponseWriter, request *http.Request) {
 
 	fmt.Println("*** Call GetAll Method ***")
 
 	response.Header().Set("Content-Type", "application/json")
 
-	displays, err := displayService.FindAll2()
+	displays, err := displayService.FindAll()
 
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)

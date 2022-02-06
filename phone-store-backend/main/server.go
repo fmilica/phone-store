@@ -43,9 +43,9 @@ func runServer() {
 	httpRouter.DELETE("/phones/delete-all", phoneController.DeleteAll)
 
 	// Displays
-	// httpRouter.POST("/displays", displayController.GetAll)
-	httpRouter.GET("/displays/getAll2", displayController.GetAll2)
-	httpRouter.POST("/add-displays", displayController.Save)
+	httpRouter.POST("/displays/search", displayController.Search)
+	httpRouter.GET("/displays/getAll", displayController.GetAll)
+	httpRouter.POST("/displays/add-displays", displayController.Save)
 
 	// Comments
 	httpRouter.POST("/comments", commentController.Save)

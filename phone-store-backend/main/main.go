@@ -5,5 +5,6 @@ func main() {
 	// createTablesDB()
 	// deleteAll()
 	// createAllInit()
+	// dropConstraint()
 	runServer()
 }

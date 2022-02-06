@@ -36,9 +36,8 @@ func (*commentRepo) Save(comment *model.Comment) (*model.Comment, error) {
 	defer db.Close()
 
 	// insert to db
-	insertStmt := `insert into "Comment"("id", "displayId", "parentId", "content", "comments", "ratings") values($1, $2, $3, $4, $5, $6)`
-	_, e := db.Exec(insertStmt, comment.Id, comment.DisplayId, comment.ParentId, comment.Content,
-		comment.Comments, comment.Ratings)
+	insertStmt := `insert into "Comment"("id", "displayId", "parentId", "content") values($1, $2, $3, $4)`
+	_, e := db.Exec(insertStmt, comment.Id, comment.DisplayId, comment.ParentId, comment.Content)
 	CheckError(e)
 
 	return comment, nil

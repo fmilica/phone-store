@@ -10,8 +10,8 @@ import (
 type DisplayService interface {
 	Validate(displayDTO *model.DisplayDTO) error
 	Create(display *model.DisplayDTO) (*model.Display, error)
-	// FindAll(displaySearchDTO *model.DisplaySearchDTO) ([]model.Display, error)
-	FindAll2() ([]model.Display, error)
+	Search(displaySearchDTO *model.DisplaySearchDTO) ([]model.Display, error)
+	FindAll() ([]model.Display, error)
 	// DeleteAll()
 }
 
@@ -73,12 +73,12 @@ func (*displayService) Validate(displayDTO *model.DisplayDTO) error {
 	return nil
 }
 
-// func (*displayService) FindAll(search *model.Search) ([]model.Display, error) {
+func (*displayService) Search(search *model.DisplaySearchDTO) ([]model.Display, error) {
 
-// 	return displayRepo.FindAll(search)
-// }
+	return displayRepo.Search(search)
+}
 
-func (*displayService) FindAll2() ([]model.Display, error) {
+func (*displayService) FindAll() ([]model.Display, error) {
 
-	return displayRepo.FindAll2()
+	return displayRepo.FindAll()
 }

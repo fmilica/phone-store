@@ -271,3 +271,27 @@ func CheckError(err error) {
 		panic(err)
 	}
 }
+
+func dropConstraint() {
+
+	// connection string
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	// close database when return
+	defer db.Close()
+
+	// insert to db
+	insertStmt := `
+		ALTER TABLE "Comment"
+		DROP CONSTRAINT comment_parentid_foreign;
+	`
+	_, e := db.Exec(insertStmt)
+	CheckError(e)
+
+	fmt.Println("Constraints removed")
+}

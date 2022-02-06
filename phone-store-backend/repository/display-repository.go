@@ -11,9 +11,8 @@ import (
 
 type DisplayRepository interface {
 	Save(display *model.DisplayDTO) (*model.Display, error)
-	//FindAll(search *model.DisplaySearchDTO) ([]model.Display, error)
-	FindAll2() ([]model.Display, error)
-	// DeleteAll()
+	Search(search *model.DisplaySearchDTO) ([]model.Display, error)
+	FindAll() ([]model.Display, error)
 }
 
 type displayRepo struct{}
@@ -58,7 +57,7 @@ func (*displayRepo) Save(displayDTO *model.DisplayDTO) (*model.Display, error) {
 	return display, nil
 }
 
-func (*displayRepo) FindAll2() ([]model.Display, error) {
+func (*displayRepo) FindAll() ([]model.Display, error) {
 
 	// connection string
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
@@ -124,6 +123,78 @@ func (*displayRepo) FindAll2() ([]model.Display, error) {
 		displays = append(displays, model.Display{Id: id, Price: price, Date: d2,
 			Phone: phone, Ratings: ratings, Comments: comments})
 	}
+
+	return displays, nil
+}
+
+func (*displayRepo) Search(search *model.DisplaySearchDTO) ([]model.Display, error) {
+
+	// connection string
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckErrorDisplay(err)
+
+	// close database
+	defer db.Close()
+
+	searchPreprocess(search)
+
+	query := getQuery(search)
+	fmt.Println(query)
+
+	//									$1				$2				$3				$4
+	rows, err := db.Query(query, search.PriceFrom, search.PriceTo, search.DateFrom, search.DateTo)
+	CheckErrorDisplay(err)
+
+	defer rows.Close()
+
+	displays := []model.Display{}
+
+	// layout for parse string to date
+	const layout = "2006-01-02"
+
+	for rows.Next() {
+		var id string
+		var price int
+		var date string
+		var phoneId string
+		var brand string
+		var phoneModel string
+		var phoneDate string
+		var processor string
+		var battery string
+		var ram int
+
+		err = rows.Scan(&id, &price, &date,
+			&phoneId, &brand, &phoneModel, &phoneDate, &processor, &battery, &ram)
+		CheckErrorDisplay(err)
+
+		var phone model.Phone
+		phone.Id = phoneId
+		phone.Model = phoneModel
+		phone.Brand = brand
+		d1, _ := time.Parse(layout, phoneDate[0:10])
+		phone.Date = d1
+		phone.Processor = processor
+		phone.Battery = battery
+		phone.RAM = ram
+
+		// create rates
+		ratings := getRatesByDisplay(id)
+
+		// create comments
+		comments := getCommentsByDisplay(id)
+
+		d2, _ := time.Parse(layout, date[0:10])
+		displays = append(displays, model.Display{Id: id, Price: price, Date: d2,
+			Phone: phone, Ratings: ratings, Comments: comments})
+	}
+
+	// offers = filterByDate(offers, search.DateFrom, search.DateTo)
+	// offers = sortByDate(offers, search.Sort)
 
 	return displays, nil
 }
